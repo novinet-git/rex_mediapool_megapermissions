@@ -8,6 +8,9 @@ Basiert auf dem Addon Mediapool 2.5.0-beta2
 ### Stand
 26.01.2019
 
+### Installation
+Einfach den Ordner redaxo/src/addons/mediapool austauschen und im Anschluss Cache löschen
+
 ### Credits
 Vielen Dank für die fantastische Unterstützung
 [Joachim Dürr](https://github.com/joachimdoerr)
