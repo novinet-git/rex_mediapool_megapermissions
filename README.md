@@ -1,5 +1,6 @@
 ## Medienpool mit erweiterten Lese- und Schreibrechten
 Addon zur Umbenennung und Umsortierung von Medienpool-Kategorien.
+Wenn Leserechte eingeschränkt sind, dann werden dem Benutzer nur die für ihn ausgewählten Medienkategorien angezeigt. Bei eingeschränkten Schreibrechten kann der Benutzer nun eigene Unterkategorien erstellen.
 
 ### Version
 Basiert auf dem Addon Mediapool 2.5.0-beta2
