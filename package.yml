@@ -1,0 +1,33 @@
+package: mediapool
+version: '2.5.0-beta2'
+author: 'Jan Kristinus'
+supportpage: www.redaxo.org/de/forum/
+
+page:
+    title: translate:mediapool
+    popup: openMediaPool(); return false;
+    perm: media/hasMediaPerm
+    prio: 20
+    block: system
+    pjax: true
+    icon: rex-icon rex-icon-media
+    subpages:
+        media:     { title: translate:pool_file_list }
+        upload:    { title: translate:pool_file_insert }
+        structure: { title: translate:pool_cat_list,   perm: media_pool[categories_editor] }
+        sync:      { title: translate:pool_sync_files, perm: media/hasAll }
+
+blocked_extensions: [php, php3, php4, php5, php6, php7, phar, pht, phtml, hh, pl, asp, aspx, cfm, jsp, jsf, bat, sh, cgi, htaccess, htpasswd]
+
+# optional mime type whitelist. the list is checked after the blocked_extensions check from above has passed.
+# exmaple:
+#   allowed_mime_types:
+#       gif: [image/gif]
+#       jpg: [image/jpeg, image/pjpeg]
+allowed_mime_types: ~
+
+allowed_doctypes: [bmp, css, doc, docx, eps, gif, gz, jpg, jpeg, mov, mp3, mp4, ogg, pdf, png, ppt, pptx, pps, ppsx, rar, rtf, svg, swf, tar, tif, tiff, txt, webp, wma, xls, xlsx, zip]
+image_extensions: [bmp, gif, jpeg, jpg, png, svg, tif, tiff, webp]
+
+requires:
+    redaxo: ^5.5.0
