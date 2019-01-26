@@ -9,7 +9,7 @@ Basiert auf dem Addon Mediapool 2.5.0-beta2
 
 ### Credits
 Vielen Dank für die fantastische Unterstützung
-Joachim Dürr
+[Joachim Dürr](https://github.com/joachimdoerr)
 
 ### Im Auftrag von
 Daniel Steffen
