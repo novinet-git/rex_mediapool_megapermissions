@@ -59,7 +59,7 @@ if ($rex_file_category == -1) {
     $rex_file_category = rex_session('media[rex_file_category]', 'int');
 
     // check permission not given get first there the user have
-    if ($rex_file_category > 0 && !rex::getUser()->getComplexPerm('media')->hasAll()) {
+    if ($rex_file_category >= 0 && !rex::getUser()->getComplexPerm('media')->hasAll()) {
         if (!rex::getUser()->getComplexPerm('media')->hasCategoryPerm($rex_file_category)
             && !rex::getUser()->getComplexPerm('media_read')->hasCategoryPerm($rex_file_category)
         ) {
