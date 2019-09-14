@@ -95,8 +95,6 @@ pool_upload = Caricamento file
 
 all_mediafolder = Tutte le categorie di media
 mediafolder = Categorie di media
-mediafolder_read = All media categories [read]
-all_mediafolder_read = Media categories [read]
 
 be_search_mpool_media = Nome media
 be_search_mpool_search = Cerca

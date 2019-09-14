@@ -42,7 +42,7 @@ class rex_media_category_select extends rex_select
 
     protected function addCatOptions()
     {
-        if ($this->rootId !== null) {
+        if (null !== $this->rootId) {
             if (is_array($this->rootId)) {
                 foreach ($this->rootId as $rootId) {
                     if ($rootCat = rex_media_category::get($rootId)) {
@@ -63,7 +63,7 @@ class rex_media_category_select extends rex_select
         }
     }
 
-    protected function addCatOption(rex_media_category $mediacat, $parentRemoveId = null)
+    protected function addCatOption(rex_media_category $mediacat)
     {
         $childWithPermission = false;
         $parentWithPermission = false;
