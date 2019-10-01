@@ -116,7 +116,7 @@ $table = '
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th class="rex-table-icon"><a href="' . $link . $cat_id . '&amp;media_method=add_cat"' . rex::getAccesskey(rex_i18n::msg('pool_kat_create'), 'add') . ' title="' . rex_i18n::msg('pool_kat_create') . '"><i class="rex-icon rex-icon-add-media-category"></i></a></th>
+                <th class="rex-table-icon">' . $add . '</th>
                 <th class="rex-table-id">' . rex_i18n::msg('id') . '</th>
                 <th>' . rex_i18n::msg('pool_kat_name') . '</th>
                 <th class="rex-table-action" colspan="2">' . rex_i18n::msg('pool_kat_function') . '</th>
