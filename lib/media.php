@@ -92,11 +92,11 @@ class rex_media
      */
     public static function getRootMedia()
     {
-        return static::getInstanceList('root_media', 'static::get', static function () {
+        return static::getInstanceList('root_media', ['static', 'get'], static function () {
             $list_path = rex_path::addonCache('mediapool', '0.mlist');
 
-            $list = rex_file::getCache($list_path);
-            if (!$list) {
+            $list = rex_file::getCache($list_path, null);
+            if (null === $list) {
                 rex_media_cache::generateList(0);
                 $list = rex_file::getCache($list_path);
             }
@@ -114,7 +114,7 @@ class rex_media
     }
 
     /**
-     * @return rex_media_category
+     * @return rex_media_category|null
      */
     public function getCategory()
     {
@@ -342,10 +342,6 @@ class rex_media
         return isset($this->$value) || isset($this->{'med_' . $value});
     }
 
-    /**
-     * @param $value
-     * @return mixed
-     */
     public function getValue($value)
     {
         // damit alte rex_article felder wie copyright, description
