@@ -4,6 +4,18 @@
  * @package redaxo5
  */
 
+assert(isset($PERMALL) && is_bool($PERMALL));
+assert(isset($arg_fields) && is_string($arg_fields));
+assert(isset($arg_url) && is_array($arg_url));
+
+// defaults for globals passed in from index.php
+ if (!isset($success)) {
+     $success = '';
+ }
+ if (!isset($error)) {
+     $error = '';
+ }
+
 // *************************************** SUBPAGE: KATEGORIEN
 
 $media_method = rex_request('media_method', 'string');
@@ -64,7 +76,7 @@ if (0 == $cat_id || !($OOCat = rex_media_category::get($cat_id))) {
     for ($i = 1; $i < count($paths); ++$i) {
         $iid = current($paths);
         if ('' != $iid) {
-            $icat = rex_media_category::get($iid);
+            $icat = rex_media_category::get((int) $iid);
 
             $n = [];
             $n['title'] = rex_escape($icat->getName());
@@ -153,12 +165,12 @@ foreach ($OOCats as $OOCat) {
 
         $editable = (rex::getUser()->getComplexPerm('media')->hasAll() || $parentWithPermission); // || rex::getUser()->getComplexPerm('media')->hasCategoryPerm($OOCat->getId()));
 
-        if ($media_method == 'update_file_cat' && $edit_id == $iid) {
+        if ('update_file_cat' == $media_method && $edit_id == $iid) {
             $table .= '
                 <tr class="mark">
                     <td class="rex-table-icon"><i class="rex-icon rex-icon-media-category"></i></td>
                     <td class="rex-table-id" data-title="' . rex_i18n::msg('id') . '">' . $iid . '</td>
-                    <td data-title="' . rex_i18n::msg('pool_kat_name') . '"><input class="form-control" type="text" name="cat_name" value="' . rex_escape($iname) . '" /></td>
+                    <td data-title="' . rex_i18n::msg('pool_kat_name') . '"><input class="form-control" type="text" name="cat_name" value="' . rex_escape($iname) . '" autofocus /></td>
                     <td class="rex-table-action" colspan="2">
                         <input type="hidden" name="edit_id" value="' . $edit_id . '" />
                         <button class="btn btn-save" type="submit" value="' . rex_i18n::msg('pool_kat_update') . '"' . rex::getAccesskey(rex_i18n::msg('pool_kat_update'), 'save') . '>' . rex_i18n::msg('pool_kat_update') . '</button>
@@ -175,11 +187,10 @@ foreach ($OOCats as $OOCat) {
                     <td class="rex-table-icon"><a href="' . $link . $iid . '" title="' . rex_escape($OOCat->getName()) . '"><i class="rex-icon rex-icon-media-category"></i></a></td>
                     <td class="rex-table-id" data-title="' . rex_i18n::msg('id') . '">' . $iid . '</td>
                     <td data-title="' . rex_i18n::msg('pool_kat_name') . '"><a href="' . $link . $iid . '">' . rex_escape($OOCat->getName()) . '</a></td>
-                    <td class="rex-table-action">'.$edit.'</td>
-                    <td class="rex-table-action">'.$delete.'</td>
+                    <td class="rex-table-action">' . $edit . '</td>
+                    <td class="rex-table-action">' . $delete . '</td>
                 </tr>';
         }
-
     }
 }
 $table .= '

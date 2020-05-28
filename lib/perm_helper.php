@@ -8,7 +8,6 @@ class media_category_perm_helper
     /**
      * @param rex_media_category $mediacat
      * @return bool|mixed|rex_media_category
-     * @author Joachim Doerr
      */
     public static function checkChildren(rex_media_category $mediacat, $check_read_perms)
     {
@@ -45,7 +44,6 @@ class media_category_perm_helper
      * @param rex_media_category $mediacat
      * @param $check_read_perms
      * @return bool|rex_media_category
-     * @author Joachim Doerr
      */
     public static function checkParents(rex_media_category $mediacat, $check_read_perms)
     {
@@ -65,7 +63,6 @@ class media_category_perm_helper
      * @param rex_media_category $mediacat
      * @param $id
      * @return bool
-     * @author Joachim Doerr
      */
     public static function isIdParentInPath(rex_media_category $mediacat, $id)
     {

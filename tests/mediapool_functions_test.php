@@ -12,7 +12,7 @@ class rex_mediapool_functions_test extends TestCase
      */
     public function testIsAllowedMediaType($expected, $filename, array $args = [])
     {
-        $this->assertSame($expected, rex_mediapool_isAllowedMediaType($filename, $args));
+        static::assertSame($expected, rex_mediapool_isAllowedMediaType($filename, $args));
     }
 
     public function provideIsAllowedMediaType()
@@ -45,7 +45,7 @@ class rex_mediapool_functions_test extends TestCase
             'md' => ['text/plain'],
         ]);
 
-        $this->assertSame($expected, rex_mediapool_isAllowedMimeType($path, $filename));
+        static::assertSame($expected, rex_mediapool_isAllowedMimeType($path, $filename));
 
         $addon->setProperty('allowed_mime_types', $whitelist);
     }
@@ -55,8 +55,8 @@ class rex_mediapool_functions_test extends TestCase
         return [
             [false, __FILE__],
             [false, __FILE__, 'foo.md'],
-            [true, __DIR__.'/../CHANGELOG.md'],
-            [false, __DIR__.'/../CHANGELOG.md', 'foo.txt'],
+            [true, __DIR__ . '/../CHANGELOG.md'],
+            [false, __DIR__ . '/../CHANGELOG.md', 'foo.txt'],
         ];
     }
 }
