@@ -29,8 +29,7 @@ $mediaMethod = rex_request('media_method', 'string');
 
 if ($rexFileCategoryName > 0) {
     $hasCategoryPerm = (rex::getUser()->getComplexPerm('media')->hasCategoryPerm($rexFileCategoryName)
-            // TODO check usage
-         || media_category_perm_helper::checkParents(rex_media_category::get($rexFileCategory), false) instanceof rex_media_category);
+        || rex_media_category_perm_helper::getMediaCategoryParent(rex_media_category::get($rexFileCategoryName), false) instanceof rex_media_category);
 } else {
     $hasCategoryPerm = rex::getUser()->getComplexPerm('media')->hasCategoryPerm($rexFileCategoryName);
 }
@@ -82,7 +81,7 @@ if ($hasCategoryPerm && 'delete_selectedmedia' == $mediaMethod) {
                 if ($media) {
                     if (rex::getUser()->getComplexPerm('media')->hasCategoryPerm($media->getCategoryId())
                             // TODO check usage
-                         || media_category_perm_helper::checkParents($media->getCategory(), false) instanceof rex_media_category // yes than go go
+                         || rex_media_category_perm_helper::checkParents($media->getCategory(), false) instanceof rex_media_category // yes than go go
                     ) {
                         $return = rex_mediapool_deleteMedia($fileName);
                         if ($return['ok']) {

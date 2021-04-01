@@ -37,8 +37,7 @@ if (rex_post('btn_delete', 'string')) {
         if ($media) {
             $filename = $media->getFileName();
             if (rex::getUser()->getComplexPerm('media')->hasCategoryPerm($media->getCategoryId())
-                    // TODO check usage
-                || media_category_perm_helper::checkParents($media->getCategory(), false) instanceof rex_media_category
+                || rex_media_category_perm_helper::getMediaCategoryParent($media->getCategory(), false) instanceof rex_media_category
             ) {
                 $return = rex_mediapool_deleteMedia($filename);
                 if ($return['ok']) {
@@ -113,8 +112,7 @@ if (1 != $gf->getRows()) {
 
 $TPERM = false;
 if (rex::getUser()->getComplexPerm('media')->hasCategoryPerm($gf->getValue('category_id'))
-        // TODO check usage
-     || media_category_perm_helper::checkParents(rex_media_category::get($gf->getValue('category_id')), false) instanceof rex_media_category) {
+    || rex_media_category_perm_helper::getMediaCategoryParent(rex_media_category::get($gf->getValue('category_id')), false) instanceof rex_media_category) {
     $TPERM = true;
 }
 
@@ -237,7 +235,7 @@ if ($TPERM) {
 
     $e = [];
     $e['label'] = '<label>' . rex_i18n::msg('pool_filename') . '</label>';
-    $e['field'] = '<p class="form-control-static"><a href="' . rex_url::media($encoded_fname) . '">' . rex_escape($fname) . '</a> <span class="rex-filesize">' . $ffile_size . '</span></p>';
+    $e['field'] = '<p class="form-control-static"><a href="' . rex_url::media($encodedFname) . '">' . rex_escape($fname) . '</a> <span class="rex-filesize">' . $ffileSize . '</span></p>';
     $formElements[] = $e;
 
     $e = [];

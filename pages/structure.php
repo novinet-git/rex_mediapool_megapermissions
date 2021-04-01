@@ -150,9 +150,8 @@ if ('add_cat' == $mediaMethod) {
 }
 
 foreach ($OOCats as $OOCat) {
-    // TODO check usage
-    $childWithPermission = media_category_perm_helper::checkChildren($OOCat, false);
-    $parentWithPermission = media_category_perm_helper::checkParents($OOCat, false);
+    $childWithPermission = rex_media_category_perm_helper::getMediaCategoryChildren($OOCat, false);
+    $parentWithPermission = rex_media_category_perm_helper::getMediaCategoryParent($OOCat, false);
 
     if (
         rex::getUser()->getComplexPerm('media')->hasCategoryPerm($OOCat->getId()) // check media cat
