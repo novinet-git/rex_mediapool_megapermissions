@@ -1,6 +1,33 @@
 Changelog
 =========
 
+Version 2.10.0 – 03.03.2021
+---------------------------
+
+### Neu
+
+* Bei der Darstellung der Metabeschreibung im Backend werden HTML-Tags entfernt (@skerbis)
+
+
+Version 2.9.1 – 25.01.2021
+--------------------------
+
+### Bugfixes
+
+* `rex_media_category_select`:
+    - `setRootId` funktionierte nur mit Root-Kategorien (@gharlan)
+    - Bei eingeschränkten Kategorierechten fehlten berechtigte Kategorien, wenn für deren Root keine Berechtigung vorhanden ist (@gharlan)
+
+
+Version 2.9.0 – 01.07.2020
+--------------------------
+
+### Neu
+
+* Neuer EP `MEDIA_ADD`, über den neue Medien vor dem Speichern weiter validiert werden können (@portux)
+* Neues Recht `media[sync]` um den Zugriff auf die Sync-Page explizit steuern zu können (@skerbis)
+
+
 Version 2.8.1 – 08.05.2020
 --------------------------
 

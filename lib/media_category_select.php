@@ -7,15 +7,18 @@
  */
 class rex_media_category_select extends rex_select
 {
-    /**
-     * @var bool
-     */
-    private $check_perms;
+    public const WRITE = 1;
+    public const READ = 2;
 
     /**
      * @var bool
      */
-    private $check_read_perms;
+    private $check_perms = false;
+
+    /**
+     * @var bool
+     */
+    private $check_read_perms = false;
 
     /**
      * @var int|int[]|null
@@ -84,7 +87,7 @@ class rex_media_category_select extends rex_select
         }
     }
 
-    protected function addCatOption(rex_media_category $mediacat)
+    protected function addCatOption(rex_media_category $mediacat, int $parentId = 0)
     {
         $childWithPermission = false;
         $parentWithPermission = false;
@@ -94,8 +97,8 @@ class rex_media_category_select extends rex_select
         }
 
         if ($this->check_perms) {
-            $childWithPermission = media_category_perm_helper::checkChildren($mediacat, $this->check_read_perms);
-            $parentWithPermission = media_category_perm_helper::checkParents($mediacat, $this->check_read_perms);
+            $childWithPermission = rex_media_category_perm_helper::getMediaCategoryChildren($mediacat, $this->check_read_perms);
+            $parentWithPermission = rex_media_category_perm_helper::getMediaCategoryParent($mediacat, $this->check_read_perms);
         }
 
         if (!$this->check_perms ||
@@ -109,14 +112,14 @@ class rex_media_category_select extends rex_select
             $categoryId = $mediacat->getId();
             $parentCategoryId = $mediacat->getParentId();
             $value = $categoryId;
-            $attributes = array();
+            $attributes = [];
 
             // no permission for parent set as id for parent the id from the first child with permission
             if ($this->check_perms && $childWithPermission instanceof rex_media_category && (
                     $value != $childWithPermission->getId() // my id is not the id of the child with the permission
                     && (
-                        media_category_perm_helper::isIdParentInPath($childWithPermission, $value) === true // and my id is in the path
-                        && media_category_perm_helper::isIdParentInPath($mediacat, $childWithPermission->getId()) !== true // and the child id is not in my path!
+                        true === rex_media_category_perm_helper::isIdParentInPath($childWithPermission, $value) // and my id is in the path
+                        && true !== rex_media_category_perm_helper::isIdParentInPath($mediacat, $childWithPermission->getId()) // and the child id is not in my path!
                     )
                 )
             ) {
@@ -127,11 +130,12 @@ class rex_media_category_select extends rex_select
             $categoryName = $mediacat->getName() . ' [' . $categoryId . ']';
             $this->addOption($categoryName, $value, $categoryId, $parentCategoryId, $attributes);
 
-            $childs = $mediacat->getChildren();
+            $parentId = $mediacat->getId();
+            $children = $mediacat->getChildren();
 
-            if (is_array($childs)) {
-                foreach ($childs as $child) {
-                    $this->addCatOption($child);
+            if (is_array($children)) {
+                foreach ($children as $child) {
+                    $this->addCatOption($child, $parentId);
                 }
             }
         }
