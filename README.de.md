@@ -11,7 +11,7 @@ Einfach den Ordner redaxo/src/addons/mediapool austauschen und im Anschluss Cach
 
 ### Credits
 Vielen Dank für die fantastische Unterstützung
-[Joachim Dürr](https://github.com/joachimdoerr)
+[Joachim Dörr](https://github.com/joachimdoerr)
 
 ### Im Auftrag von
 Daniel Steffen
