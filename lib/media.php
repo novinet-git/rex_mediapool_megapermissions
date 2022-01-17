@@ -5,6 +5,7 @@
  *
  * @package redaxo\mediapool
  */
+#[AllowDynamicProperties]
 class rex_media
 {
     use rex_instance_list_pool_trait;
@@ -85,6 +86,21 @@ class rex_media
 
             return null;
         });
+    }
+
+    /**
+     * @throws rex_sql_exception
+     * @return null|static
+     */
+    public static function forId(int $mediaId): ?self
+    {
+        $media = rex_sql::factory();
+        $media->setQuery('select filename from ' . rex::getTable('media') . ' where id=?', [$mediaId]);
+
+        if (1 != $media->getRows()) {
+            return null;
+        }
+        return static::get((string) $media->getValue('filename'));
     }
 
     /**
@@ -318,7 +334,7 @@ class rex_media
      */
     public static function isDocType($type)
     {
-        return in_array($type, self :: getDocTypes());
+        return in_array($type, self::getDocTypes());
     }
 
     // allowed image upload types

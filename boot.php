@@ -10,8 +10,6 @@
 
 $addon = rex_addon::get('mediapool');
 
-$mypage = 'mediapool';
-
 rex_complex_perm::register('media', rex_media_perm::class);
 rex_complex_perm::register('media_read', rex_media_read_perm::class);
 rex_perm::register('media_pool[categories_editor]', null, rex_perm::EXTRAS);
