@@ -1,20 +1,16 @@
 <?php
 
-/**
- * @package redaxo5
- */
-
 assert(isset($PERMALL) && is_bool($PERMALL));
 assert(isset($argFields) && is_string($argFields));
 assert(isset($argUrl) && is_array($argUrl));
 
 // defaults for globals passed in from index.php
- if (!isset($success)) {
-     $success = '';
- }
- if (!isset($error)) {
-     $error = '';
- }
+if (!isset($success)) {
+    $success = '';
+}
+if (!isset($error)) {
+    $error = '';
+}
 
 // *************************************** SUBPAGE: KATEGORIEN
 
@@ -46,7 +42,7 @@ try {
                 }
                 $success = rex_media_category_service::addCategory(
                     rex_request('catname', 'string'),
-                    $parent
+                    $parent,
                 );
             }
         }
@@ -112,7 +108,7 @@ if (!$PERMALL) {
     if ($catId > 0) {
         $pwp = rex_media_category_perm_helper::getMediaCategoryParent(rex_media_category::get($catId), false);
         if (
-            rex::getUser()->getComplexPerm('media')->hasCategoryPerm($catId) // check media cat
+            rex::requireUser()->getComplexPerm('media')->hasCategoryPerm($catId) // check media cat
             || $pwp instanceof rex_media_category
         ) {
             $addable = true;
@@ -154,14 +150,14 @@ foreach ($OOCats as $OOCat) {
     $parentWithPermission = rex_media_category_perm_helper::getMediaCategoryParent($OOCat, false);
 
     if (
-        rex::getUser()->getComplexPerm('media')->hasCategoryPerm($OOCat->getId()) // check media cat
+        rex::requireUser()->getComplexPerm('media')->hasCategoryPerm($OOCat->getId()) // check media cat
         || $parentWithPermission instanceof rex_media_category // check all parents
         || $childWithPermission instanceof rex_media_category // check children
     ) {
         $iid = $OOCat->getId();
         $iname = $OOCat->getName();
 
-        $editable = (rex::getUser()->getComplexPerm('media')->hasAll() || $parentWithPermission); // || rex::getUser()->getComplexPerm('media')->hasCategoryPerm($OOCat->getId()));
+        $editable = (rex::requireUser()->getComplexPerm('media')->hasAll() || $parentWithPermission); // || rex::getUser()->getComplexPerm('media')->hasCategoryPerm($OOCat->getId()));
 
         if ('update_file_cat' == $mediaMethod && $editId == $iid) {
             $table .= '

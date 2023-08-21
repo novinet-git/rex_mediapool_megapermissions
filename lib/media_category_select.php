@@ -10,26 +10,19 @@ class rex_media_category_select extends rex_select
     public const WRITE = 1;
     public const READ = 2;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $checkPerms;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $checkReadPerms = false;
 
-    /**
-     * @var int|int[]|null
-     */
+    /** @var int|int[]|null */
     private $rootId;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $select2;
 
+    /** @var bool */
     private $loaded = false;
 
     public function __construct($checkPerms = true, $checkReadPerms = false, $select2 = false)
@@ -49,12 +42,16 @@ class rex_media_category_select extends rex_select
      * Kategorie-Id oder ein Array von Kategorie-Ids als Wurzelelemente der Select-Box.
      *
      * @param int|int[]|null $rootId Kategorie-Id oder Array von Kategorie-Ids zur Identifikation der Wurzelelemente
+     * @return void
      */
     public function setRootId($rootId)
     {
         $this->rootId = $rootId;
     }
 
+    /**
+     * @return void
+     */
     protected function addCatOptions()
     {
         if (null !== $this->rootId) {
@@ -78,12 +75,15 @@ class rex_media_category_select extends rex_select
         }
     }
 
+    /**
+     * @return void
+     */
     protected function addCatOption(rex_media_category $mediacat, int $parentId = 0)
     {
         $childWithPermission = false;
         $parentWithPermission = false;
 
-        if (rex::getUser()->getComplexPerm('media')->hasAll()) {
+        if (rex::requireUser()->getComplexPerm('media')->hasAll()) {
             $this->checkPerms = false;
         }
 
@@ -94,8 +94,8 @@ class rex_media_category_select extends rex_select
 
         if (!$this->checkPerms ||
             $this->checkPerms && (
-                rex::getUser()->getComplexPerm('media')->hasCategoryPerm($mediacat->getId())
-                || ($this->checkReadPerms && rex::getUser()->getComplexPerm('media_read')->hasCategoryPerm($mediacat->getId()))
+                rex::requireUser()->getComplexPerm('media')->hasCategoryPerm($mediacat->getId())
+                || ($this->checkReadPerms && rex::requireUser()->getComplexPerm('media_read')->hasCategoryPerm($mediacat->getId()))
                 || $parentWithPermission instanceof rex_media_category // check all parents
                 || $childWithPermission instanceof rex_media_category // check children
             )

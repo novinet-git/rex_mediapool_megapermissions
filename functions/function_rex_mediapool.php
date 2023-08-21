@@ -32,7 +32,6 @@ function rex_mediapool_filename($mediaName, $doSubindexing = true): string
  *
  * @return array
  * @deprecated since 2.11, use `rex_media_service::addMedia` instead
- * @psalm-suppress UnusedParam
  */
 function rex_mediapool_saveMedia($FILE, $rexFileCategory, $FILEINFOS, $userlogin = null, $doSubindexing = true)
 {
@@ -81,7 +80,6 @@ function rex_mediapool_saveMedia($FILE, $rexFileCategory, $FILEINFOS, $userlogin
  *
  * @return array
  * @deprecated since 2.11, use `rex_media_service::updateMedia` instead
- * @psalm-suppress UnusedParam
  */
 function rex_mediapool_updateMedia($FILE, &$FILEINFOS, $userlogin = null)
 {
@@ -117,7 +115,6 @@ function rex_mediapool_updateMedia($FILE, &$FILEINFOS, $userlogin = null)
  *
  * @return array
  * @deprecated since 2.11, use `rex_media_service::addMedia` instead
- * @psalm-suppress UnusedParam
  */
 function rex_mediapool_syncFile($physicalFilename, $categoryId, $title, $filesize = null, $filetype = null, $userlogin = null)
 {
@@ -142,9 +139,8 @@ function rex_mediapool_syncFile($physicalFilename, $categoryId, $title, $filesiz
 /**
  * @param string $filename
  *
- * @return array
+ * @return array{ok: bool, msg: string}
  *
- * @psalm-return array{ok: bool, msg: string}
  * @deprecated since 2.11, use `rex_media_service::deleteMedia` instead
  */
 function rex_mediapool_deleteMedia($filename)
@@ -189,7 +185,7 @@ function rex_mediapool_Mediaform($formTitle, $buttonTitle, $rexFileCategory, $fi
     $catsSel->setAttribute('onchange', 'this.form.submit()');
     $catsSel->setSelected($rexFileCategory);
 
-    if (rex::getUser()->getComplexPerm('media')->hasAll()) {
+    if (rex::requireUser()->getComplexPerm('media')->hasAll()) {
         $catsSel->addOption(rex_i18n::msg('pool_kats_no'), '0');
     }
 
@@ -310,6 +306,7 @@ function rex_mediapool_Mediaform($formTitle, $buttonTitle, $rexFileCategory, $fi
 
 /**
  * Ausgabe des Medienpool Upload-Formulars.
+ * @return string
  */
 function rex_mediapool_Uploadform($rexFileCategory)
 {
@@ -318,6 +315,7 @@ function rex_mediapool_Uploadform($rexFileCategory)
 
 /**
  * Ausgabe des Medienpool Sync-Formulars.
+ * @return string
  */
 function rex_mediapool_Syncform($rexFileCategory)
 {

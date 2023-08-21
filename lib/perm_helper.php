@@ -28,8 +28,8 @@ class rex_media_category_perm_helper
                 }
 
                 // check child self
-                if (rex::getUser()->getComplexPerm('media')->hasCategoryPerm($child->getId()) ||
-                    ($check_read_perms && rex::getUser()->getComplexPerm('media_read')->hasCategoryPerm($child->getId()))
+                if (rex::requireUser()->getComplexPerm('media')->hasCategoryPerm($child->getId()) ||
+                    ($check_read_perms && rex::requireUser()->getComplexPerm('media_read')->hasCategoryPerm($child->getId()))
                 ) {
                     return $child;
                 }
@@ -49,8 +49,8 @@ class rex_media_category_perm_helper
     {
         if ($mediacat instanceof rex_media_category && count($mediacat->getPathAsArray()) > 0) {
             foreach ($mediacat->getPathAsArray() as $parent) {
-                if (rex::getUser()->getComplexPerm('media')->hasCategoryPerm($parent) ||
-                    ($check_read_perms && rex::getUser()->getComplexPerm('media_read')->hasCategoryPerm($parent))
+                if (rex::requireUser()->getComplexPerm('media')->hasCategoryPerm($parent) ||
+                    ($check_read_perms && rex::requireUser()->getComplexPerm('media_read')->hasCategoryPerm($parent))
                 ) {
                     return rex_media_category::get($parent);
                 }

@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package redaxo5
- */
-
 assert(isset($csrf) && $csrf instanceof rex_csrf_token);
 assert(isset($rexFileCategory) && is_int($rexFileCategory));
 assert(isset($openerInputField) && is_string($openerInputField));
@@ -36,7 +32,7 @@ if (rex_post('btn_delete', 'string')) {
 
         if ($media) {
             $filename = $media->getFileName();
-            if (rex::getUser()->getComplexPerm('media')->hasCategoryPerm($media->getCategoryId())
+            if (rex::requireUser()->getComplexPerm('media')->hasCategoryPerm($media->getCategoryId())
                 || rex_media_category_perm_helper::getMediaCategoryParent($media->getCategory(), false) instanceof rex_media_category
             ) {
                 try {
@@ -68,9 +64,9 @@ if (rex_post('btn_update', 'string')) {
             $error = rex_i18n::msg('pool_file_not_found');
             $fileId = 0;
         } elseif (
-            (!rex::getUser()->getComplexPerm('media')->hasCategoryPerm($gf->getValue('category_id'))
+            (!rex::requireUser()->getComplexPerm('media')->hasCategoryPerm($gf->getValue('category_id'))
                 && !rex_media_category_perm_helper::getMediaCategoryParent(rex_media_category::get($gf->getValue('category_id')), false) instanceof rex_media_category)
-            || (!rex::getUser()->getComplexPerm('media')->hasCategoryPerm($rexFileCategory)
+            || (!rex::requireUser()->getComplexPerm('media')->hasCategoryPerm($rexFileCategory)
                 && !rex_media_category_perm_helper::getMediaCategoryParent(rex_media_category::get($rexFileCategory), false) instanceof rex_media_category)
         ) {
             $error = rex_i18n::msg('no_permission');
@@ -115,7 +111,7 @@ if (1 != $gf->getRows()) {
 }
 
 $TPERM = false;
-if (rex::getUser()->getComplexPerm('media')->hasCategoryPerm($gf->getValue('category_id'))
+if (rex::requireUser()->getComplexPerm('media')->hasCategoryPerm($gf->getValue('category_id'))
     || rex_media_category_perm_helper::getMediaCategoryParent(rex_media_category::get($gf->getValue('category_id')), false) instanceof rex_media_category) {
     $TPERM = true;
 }
@@ -186,7 +182,7 @@ if ('' != $success) {
 
 if ('' != $openerInputField) {
     $openerLink = '<a class="btn btn-xs btn-select" onclick="selectMedia(\'' . $encodedFname . '\', \'' . rex_escape($gf->getValue('title'), 'js') . '\'); return false;">' . rex_i18n::msg('pool_file_get') . '</a>';
-    if ('REX_MEDIALIST_' == substr($openerInputField, 0, 14)) {
+    if (str_starts_with($openerInputField, 'REX_MEDIALIST_')) {
         $openerLink = '<a class="btn btn-xs btn-select btn-highlight" onclick="selectMedialist(\'' . $encodedFname . '\'); return false;">' . rex_i18n::msg('pool_file_get') . '</a>';
     }
 }
@@ -215,7 +211,7 @@ if ($TPERM) {
     $catsSel->setAttribute('data-live-search', 'true');
     $catsSel->setSelected($rexFileCategory);
 
-    if (rex::getUser()->getComplexPerm('media')->hasAll()) {
+    if (rex::requireUser()->getComplexPerm('media')->hasAll()) {
         $catsSel->addOption(rex_i18n::msg('pool_kats_no'), '0');
     }
 

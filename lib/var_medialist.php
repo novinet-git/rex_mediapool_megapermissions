@@ -65,12 +65,10 @@ class rex_var_medialist extends rex_var
         }
 
         $options = '';
-        $medialistarray = explode(',', $value);
-        if (is_array($medialistarray)) {
-            foreach ($medialistarray as $file) {
-                if ('' != $file) {
-                    $options .= '<option value="' . $file . '">' . $file . '</option>';
-                }
+        $medialistarray = null === $value ? [] : explode(',', $value);
+        foreach ($medialistarray as $file) {
+            if ('' != $file) {
+                $options .= '<option value="' . $file . '">' . $file . '</option>';
             }
         }
 
@@ -80,7 +78,7 @@ class rex_var_medialist extends rex_var
         $deleteFunc = '';
         $viewFunc = '';
         $quotedId = "'".rex_escape($id, 'js')."'";
-        if (rex::getUser()->getComplexPerm('media')->hasMediaPerm()) {
+        if (rex::requireUser()->getComplexPerm('media')->hasMediaPerm()) {
             $disabled = '';
             $openFunc = 'openREXMedialist(' . $quotedId . ', \'' . $openParams . '\');';
             $addFunc = 'addREXMedialist(' . $quotedId . ', \'' . $openParams . '\');';

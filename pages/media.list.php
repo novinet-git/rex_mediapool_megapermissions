@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @package redaxo5
- */
-
 assert(isset($csrf) && $csrf instanceof rex_csrf_token);
 assert(isset($rexFileCategory) && is_int($rexFileCategory));
 assert(isset($openerInputField) && is_string($openerInputField));
@@ -19,19 +15,17 @@ if (!isset($error)) {
     $error = '';
 }
 if (!isset($argUrl)) {
-    /**
-     * @var array{args: array{types: string}, opener_input_field: string}
-     */
+    /** @var array{args: array{types: string}, opener_input_field: string} */
     $argUrl = [];
 }
 
 $mediaMethod = rex_request('media_method', 'string');
 
 if ($rexFileCategoryName > 0) {
-    $hasCategoryPerm = (rex::getUser()->getComplexPerm('media')->hasCategoryPerm($rexFileCategoryName)
+    $hasCategoryPerm = (rex::requireUser()->getComplexPerm('media')->hasCategoryPerm($rexFileCategoryName)
         || rex_media_category_perm_helper::getMediaCategoryParent(rex_media_category::get($rexFileCategoryName), false) instanceof rex_media_category);
 } else {
-    $hasCategoryPerm = rex::getUser()->getComplexPerm('media')->hasCategoryPerm($rexFileCategoryName);
+    $hasCategoryPerm = rex::requireUser()->getComplexPerm('media')->hasCategoryPerm($rexFileCategoryName);
 }
 
 if ($hasCategoryPerm && 'updatecat_selectedmedia' == $mediaMethod) {
@@ -79,7 +73,7 @@ if ($hasCategoryPerm && 'delete_selectedmedia' == $mediaMethod) {
             foreach ($selectedmedia as $filename) {
                 $media = rex_media::get($filename);
                 if ($media) {
-                    if (rex::getUser()->getComplexPerm('media')->hasCategoryPerm($media->getCategoryId())
+                    if (rex::requireUser()->getComplexPerm('media')->hasCategoryPerm($media->getCategoryId())
                         // TODO check usage
                         || rex_media_category_perm_helper::checkParents($media->getCategory(), false) instanceof rex_media_category // yes than go go
                     ) {
@@ -114,7 +108,7 @@ $catsSel->setAttribute('class', 'selectpicker form-control');
 $catsSel->setAttribute('data-live-search', 'true');
 $catsSel->setSelected($rexFileCategory);
 
-if (rex::getUser()->getComplexPerm('media')->hasAll()) {
+if (rex::requireUser()->getComplexPerm('media')->hasAll()) {
     $catsSel->addOption(rex_i18n::msg('pool_kats_no'), '0');
 }
 
