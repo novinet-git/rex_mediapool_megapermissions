@@ -16,7 +16,7 @@ class rex_media_category_select extends rex_select
     /** @var bool */
     private $checkReadPerms = false;
 
-    /** @var int|int[]|null */
+    /** @var int|list<int>|null */
     private $rootId;
 
     /** @var bool */
@@ -41,7 +41,7 @@ class rex_media_category_select extends rex_select
     /**
      * Kategorie-Id oder ein Array von Kategorie-Ids als Wurzelelemente der Select-Box.
      *
-     * @param int|int[]|null $rootId Kategorie-Id oder Array von Kategorie-Ids zur Identifikation der Wurzelelemente
+     * @param int|list<int>|null $rootId Kategorie-Id oder Array von Kategorie-Ids zur Identifikation der Wurzelelemente
      * @return void
      */
     public function setRootId($rootId)
@@ -138,7 +138,7 @@ class rex_media_category_select extends rex_select
         }
 
         if (true === $this->select2) {
-            $this->setAttribute('class', 'selectpicker');
+            $this->setAttribute('class', 'selectpicker w-100');
             $this->setAttribute('data-live-search', 'true');
         }
 

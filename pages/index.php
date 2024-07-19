@@ -26,7 +26,7 @@ $openerInputField = rex_request('opener_input_field', 'string', '');
 
 if ('' != $openerInputField) {
     if (!preg_match('{^[A-Za-z]+[\w\-\:\.]*$}', $openerInputField)) {
-        throw new Exception('invalid opener_input_field given: '. $openerInputField);
+        throw new Exception('invalid opener_input_field given: ' . $openerInputField);
     }
 
     $openerId = null;

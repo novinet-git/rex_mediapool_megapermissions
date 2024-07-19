@@ -21,11 +21,12 @@ if (!isset($argUrl)) {
 
 $mediaMethod = rex_request('media_method', 'string');
 
+$perm = rex::requireUser()->getComplexPerm('media');
 if ($rexFileCategoryName > 0) {
-    $hasCategoryPerm = (rex::requireUser()->getComplexPerm('media')->hasCategoryPerm($rexFileCategoryName)
+    $hasCategoryPerm = ($perm->hasCategoryPerm($rexFileCategoryName)
         || rex_media_category_perm_helper::getMediaCategoryParent(rex_media_category::get($rexFileCategoryName), false) instanceof rex_media_category);
 } else {
-    $hasCategoryPerm = rex::requireUser()->getComplexPerm('media')->hasCategoryPerm($rexFileCategoryName);
+    $hasCategoryPerm = $perm->hasCategoryPerm($rexFileCategoryName);
 }
 
 if ($hasCategoryPerm && 'updatecat_selectedmedia' == $mediaMethod) {
@@ -50,7 +51,7 @@ if ($hasCategoryPerm && 'updatecat_selectedmedia' == $mediaMethod) {
                         'filename' => $fileName,
                         'category_id' => $rexFileCategory,
                     ]));
-                } catch (rex_sql_exception $e) {
+                } catch (rex_sql_exception) {
                     $error = rex_i18n::msg('pool_selectedmedia_error');
                 }
             }
@@ -73,7 +74,7 @@ if ($hasCategoryPerm && 'delete_selectedmedia' == $mediaMethod) {
             foreach ($selectedmedia as $filename) {
                 $media = rex_media::get($filename);
                 if ($media) {
-                    if (rex::requireUser()->getComplexPerm('media')->hasCategoryPerm($media->getCategoryId())
+                    if ($perm->hasCategoryPerm($media->getCategoryId())
                         // TODO check usage
                         || rex_media_category_perm_helper::checkParents($media->getCategory(), false) instanceof rex_media_category // yes than go go
                     ) {
@@ -102,13 +103,14 @@ if ($hasCategoryPerm && 'delete_selectedmedia' == $mediaMethod) {
 $catsSel = new rex_media_category_select(true, false);
 $catsSel->setSize(1);
 $catsSel->setStyle('class="form-control selectpicker"');
+$catsSel->setAttribute('data-live-search', 'true');
 $catsSel->setName('rex_file_category');
 $catsSel->setId('rex_file_category');
 $catsSel->setAttribute('class', 'selectpicker form-control');
 $catsSel->setAttribute('data-live-search', 'true');
 $catsSel->setSelected($rexFileCategory);
 
-if (rex::requireUser()->getComplexPerm('media')->hasAll()) {
+if ($perm->hasAll()) {
     $catsSel->addOption(rex_i18n::msg('pool_kats_no'), '0');
 }
 
@@ -336,7 +338,7 @@ foreach ($items as $media) {
     ]));
 
     $panel .= '</td>
-    </tr>';
+                </tr>';
 }
 
 // ----- no items found
