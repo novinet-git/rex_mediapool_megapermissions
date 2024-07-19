@@ -7,9 +7,6 @@
  */
 class rex_media_category_select extends rex_select
 {
-    public const WRITE = 1;
-    public const READ = 2;
-
     /** @var bool */
     private $checkPerms;
 
@@ -27,8 +24,8 @@ class rex_media_category_select extends rex_select
 
     public function __construct($checkPerms = true, $checkReadPerms = false, $select2 = false)
     {
-        $this->checkPerms = $checkPerms;
-        $this->checkReadPerms = $checkReadPerms;
+        $this->checkPerms = $checkPerms; // check for read and write categories
+        $this->checkReadPerms = $checkReadPerms; // check for only read categories
         if ($checkPerms === false && $checkReadPerms === true) {
             $this->checkPerms = true;
         }
@@ -82,6 +79,7 @@ class rex_media_category_select extends rex_select
     {
         $childWithPermission = false;
         $parentWithPermission = false;
+        $categoryPermission = false;
 
         if (rex::requireUser()->getComplexPerm('media')->hasAll()) {
             $this->checkPerms = false;
@@ -90,36 +88,19 @@ class rex_media_category_select extends rex_select
         if ($this->checkPerms) {
             $childWithPermission = rex_media_category_perm_helper::getMediaCategoryChildren($mediacat, $this->checkReadPerms);
             $parentWithPermission = rex_media_category_perm_helper::getMediaCategoryParent($mediacat, $this->checkReadPerms);
+            $categoryPermission = rex::requireUser()->getComplexPerm('media')->hasCategoryPerm($mediacat->getId());
         }
 
-        if (!$this->checkPerms ||
-            $this->checkPerms && (
-                rex::requireUser()->getComplexPerm('media')->hasCategoryPerm($mediacat->getId())
-                || ($this->checkReadPerms && rex::requireUser()->getComplexPerm('media_read')->hasCategoryPerm($mediacat->getId()))
-                || $parentWithPermission instanceof rex_media_category // check all parents
-                || $childWithPermission instanceof rex_media_category // check children
-            )
-        ) {
-            $categoryId = $mediacat->getId();
-            $parentCategoryId = $mediacat->getParentId();
-            $value = $categoryId;
+        if (!$this->checkPerms || ($categoryPermission || $parentWithPermission || $childWithPermission)) {
+            $mid = $mediacat->getId();
+            $mname = $mediacat->getName();
             $attributes = [];
 
-            // no permission for parent set as id for parent the id from the first child with permission
-            if ($this->checkPerms && $childWithPermission instanceof rex_media_category && (
-                    $value != $childWithPermission->getId() // my id is not the id of the child with the permission
-                    && (
-                        true === rex_media_category_perm_helper::isIdParentInPath($childWithPermission, $value) // and my id is in the path
-                        && true !== rex_media_category_perm_helper::isIdParentInPath($mediacat, $childWithPermission->getId()) // and the child id is not in my path!
-                    )
-                )
-            ) {
-                $value = $childWithPermission->getId();
+            if (!$categoryPermission && $childWithPermission) {
                 $attributes['disabled'] = '1';
             }
 
-            $categoryName = $mediacat->getName() . ' [' . $categoryId . ']';
-            $this->addOption($categoryName, $value, $categoryId, $parentCategoryId, $attributes);
+            $this->addOption($mname, $mid, $mid, $parentId, $attributes);
 
             $parentId = $mediacat->getId();
         }

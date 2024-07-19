@@ -33,7 +33,6 @@ class rex_media_category_perm_helper
                 ) {
                     return $child;
                 }
-                continue;
             }
         }
         return false;
@@ -45,9 +44,9 @@ class rex_media_category_perm_helper
      *
      * @return false|rex_media_category|null
      */
-    public static function getMediaCategoryParent($mediacat, bool $check_read_perms)
+    public static function getMediaCategoryParent(?rex_media_category $mediacat, bool $check_read_perms): rex_media_category|null|bool
     {
-        if ($mediacat instanceof rex_media_category && count($mediacat->getPathAsArray()) > 0) {
+        if (count($mediacat->getPathAsArray()) > 0) {
             foreach ($mediacat->getPathAsArray() as $parent) {
                 if (rex::requireUser()->getComplexPerm('media')->hasCategoryPerm($parent) ||
                     ($check_read_perms && rex::requireUser()->getComplexPerm('media_read')->hasCategoryPerm($parent))
@@ -57,16 +56,5 @@ class rex_media_category_perm_helper
             }
         }
         return false;
-    }
-
-    /**
-     * @param rex_media_category $mediacat
-     * @param int $id
-     *
-     * @return bool
-     */
-    public static function isIdParentInPath(rex_media_category $mediacat, $id)
-    {
-        return in_array($id, $mediacat->getPathAsArray());
     }
 }
