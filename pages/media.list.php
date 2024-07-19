@@ -23,10 +23,10 @@ $mediaMethod = rex_request('media_method', 'string');
 
 $perm = rex::requireUser()->getComplexPerm('media');
 if ($rexFileCategoryName > 0) {
-    $hasCategoryPerm = ($perm->hasCategoryPerm($rexFileCategoryName)
+    $hasCategoryPerm = ($perm->hasCategoryPerm($rexFileCategory)
         || rex_media_category_perm_helper::getMediaCategoryParent(rex_media_category::get($rexFileCategoryName), false) instanceof rex_media_category);
 } else {
-    $hasCategoryPerm = $perm->hasCategoryPerm($rexFileCategoryName);
+    $hasCategoryPerm = $perm->hasCategoryPerm($rexFileCategory);
 }
 
 if ($hasCategoryPerm && 'updatecat_selectedmedia' == $mediaMethod) {
