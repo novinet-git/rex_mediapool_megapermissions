@@ -1,5 +1,7 @@
 <?php
 
+use enshrined\svgSanitize\Sanitizer;
+
 /**
  * @package redaxo\mediapool
  */
@@ -93,6 +95,8 @@ final class rex_media_service
         if ('' == $data['file']['type'] && isset($size['mime'])) {
             $data['file']['type'] = $size['mime'];
         }
+
+        self::sanitizeMedia($dstFile, $data['file']['type']);
 
         $saveObject = rex_sql::factory();
         $saveObject->setTable(rex::getTablePrefix() . 'media');
@@ -202,6 +206,8 @@ final class rex_media_service
                 }
 
                 @chmod($dstFile, rex::getFilePerm());
+
+                self::sanitizeMedia($dstFile, $filetype);
 
                 $saveObject->setValue('filetype', $filetype);
                 $saveObject->setValue('filesize', filesize($dstFile));
@@ -334,7 +340,7 @@ final class rex_media_service
             if (!in_array($orderByItem[0], self::ORDER_BY, true)) {
                 continue;
             }
-            $orderbys[] = ':orderby_' . $index . ' ' . ('ASC' == $orderByItem[1]) ? 'ASC' : 'DESC';
+            $orderbys[] = ':orderby_' . $index . ' ' . ('ASC' == $orderByItem[1] ? 'ASC' : 'DESC');
             $queryParams['orderby_' . $index] = 'm.' . $orderByItem[0];
         }
 
@@ -369,5 +375,22 @@ final class rex_media_service
         }
 
         return $items;
+    }
+
+    private static function sanitizeMedia(string $path, ?string $type): void
+    {
+        if (!rex_addon::require('mediapool')->getProperty('sanitize_svgs', true)) {
+            return;
+        }
+
+        if ('image/svg+xml' !== $type && 'svg' !== strtolower(rex_file::extension($path))) {
+            return;
+        }
+
+        $content = rex_type::notNull(rex_file::get($path));
+
+        $content = (new Sanitizer())->sanitize($content);
+
+        rex_file::put($path, $content);
     }
 }

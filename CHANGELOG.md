@@ -1,6 +1,34 @@
 Changelog
 =========
 
+Version 2.15.2 – 10.02.2025
+---------------------------
+
+### Bugfixes
+
+* SVG-Filterung optimiert durch neuen SVG-Sanitizer (@gharlan)
+* Dateiendung-Blockierung korrigiert (`.json` wird nicht mehr gesperrt aufgrund der `.js`-Sperre) (@omphteliba)
+
+
+Version 2.15.1 – 06.12.2024
+---------------------------
+
+### Bugfixes
+
+* SVG-Filterung (XSS-Schutz):
+    - Konfiguration des AntiXSS-Scripts optimiert für besseren Erhalt der SVG-Inhalte (@ischfr)
+    - Die Filterung kann optional über die Property `sanitize_svgs` deaktiviert werden (bei eigener Risikoeinschätzung) (@gharlan)
+
+
+Version 2.15.0 – 22.10.2024
+---------------------------
+
+### Security
+
+* Weitere Extensions (insbesondere `.html`) werden geblockt, um XSS über diese Dateien zu verhindern (gemeldet von Valerii Voronin) (@skerbis)
+* In SVG-Dateien wird beim Upload JS-Code entfernt, um XSS zu verhindern (gemeldet von Praison) (@gharlan)
+
+
 Version 2.13.0 – 28.02.2023
 ---------------------------
 
