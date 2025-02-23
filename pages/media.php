@@ -1,5 +1,9 @@
 <?php
 
+if (!isset($rexFileCategory) || !is_int($rexFileCategory)) {
+    $rexFileCategory = 0;
+}
+
 assert(isset($rexFileCategory) && is_int($rexFileCategory));
 assert(isset($argFields) && is_string($argFields));
 assert(isset($fileId) && is_int($fileId));
