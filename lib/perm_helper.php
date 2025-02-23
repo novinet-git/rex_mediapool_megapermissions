@@ -46,7 +46,7 @@ class rex_media_category_perm_helper
      */
     public static function getMediaCategoryParent(?rex_media_category $mediacat, bool $check_read_perms): rex_media_category|null|bool
     {
-        if (count($mediacat->getPathAsArray()) > 0) {
+        if (isset($mediacat) && count($mediacat->getPathAsArray()) > 0) {
             foreach ($mediacat->getPathAsArray() as $parent) {
                 if (rex::requireUser()->getComplexPerm('media')->hasCategoryPerm($parent) ||
                     ($check_read_perms && rex::requireUser()->getComplexPerm('media_read')->hasCategoryPerm($parent))
